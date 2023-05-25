@@ -6,8 +6,10 @@
         id给bean对象起名字
         class属性表示，该bean对象是哪个类的
     -->
-    <bean id = "bookDao" class = "org.ytq.dao.impl.BookDaoImpl" />
-    <bean id = "bookService" class = "org.ytq.service.impl.BookServiceImpl">
+    <!--name: 为bean指定别名-->
+    <bean id = "bookDao" name = "dao" class = "org.ytq.dao.impl.BookDaoImpl" scope="prototype"/>
+    <!--scope: 为bean设置作用范围，默认为singleton-->
+    <bean id = "bookService" name = "service" class = "org.ytq.service.impl.BookServiceImpl">
         <!--配置dao和service之间的关系-->
         <property name="bookDao" ref = "bookDao"/>
     </bean>

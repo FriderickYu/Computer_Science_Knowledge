@@ -5,6 +5,8 @@
 > * IoC思想的具体实现
 > * DI思想的具体实现
 
+本节代码详情请见[Spring_01_quickstart](Spring_01_quickstart)
+
 ## IoC思路整理
 
 1. Spring是用IoC容器来管理bean对象的，那么管什么？
