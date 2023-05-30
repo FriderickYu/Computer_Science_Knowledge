@@ -6,5 +6,8 @@
     <select id="selectAll" resultType="org.ytq.pojo.User">
         select * from tb_user;
     </select>
+    <select id="selectById" resultType="org.ytq.pojo.User">
+        select * from tb_user where id = #{id};
+    </select>
 </mapper>
 

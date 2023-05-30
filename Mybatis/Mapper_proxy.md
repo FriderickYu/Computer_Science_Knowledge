@@ -48,9 +48,15 @@ public interface UserMapper {
     List<User> selectAll();
 }
 ```
+
 第四个
+
 ```java
 // 3.1 获取对应的userMapper接口的代理对象
 UserMapper userMapper = sqlSession.getMapper(UserMapper.class);
 List<User> users = userMapper.selectAll();
 ```
+
+## MyBatis核心配置文件
+
+https://mybatis.org/mybatis-3/zh/configuration.html
