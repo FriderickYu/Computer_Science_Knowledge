@@ -1,0 +1,13 @@
+server:
+  port: 1944
+
+lesson: SpringBoot
+
+enterprise:
+  name: ytq
+  age: 25
+  telephone: 15545567555
+  subject:
+    - Java
+    - Python
+    - C++
