@@ -5,3 +5,14 @@ spring:
     url: jdbc:mysql://localhost:3306/mybatis_db?serverTimezone=UTC
     username: root
     password: 194466
+  main:
+    banner-mode: off
+
+# ??mybatis-plus??
+mybatis-plus:
+  configuration:
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+  global-config:
+    banner: false
+
+
