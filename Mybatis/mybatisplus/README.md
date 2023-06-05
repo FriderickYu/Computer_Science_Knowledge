@@ -2,6 +2,7 @@
 
 [官方文档参考](https://baomidou.com/)
 
+
 | 功能       | 自定义接口                             | MyBatisPlus接口                              |
 | ------------ | ---------------------------------------- | ---------------------------------------------- |
 | 新增       | boolean save(T t)                      | int insert(T t)                              |
@@ -246,8 +247,127 @@ System.out.println(loginUser);
 #### 模糊查询
 
 模糊查询最常见的就是`like`, 这里同样也有相同的方法
+
 * `like`: 匹配%字符%
 * `likeLeft`: 匹配%字符
 * `likeRight`: 匹配字符%
 
-## 
+## 实体类与数据库属性之间的映射
+
+实体类中的类名、字段需要与数据库表表明、属性列需要一一对应。但如果实体类中表名和字段不一样的话，就一定会报错，但可以使用以下方式进行弥补
+
+```java
+@TableName("tbl_user")
+public class User
+```
+
+注意，类似密码这种敏感信息是不一样在查询映射当中存在的，是无论如何都需要排除的，使用`select = false`可以实现此目的
+
+```java
+@TableField(value = "pwd", select = false)
+private String password;
+```
+
+或者，有些字段不会要求存在数据库中，而是将其存在缓存, cookie, session当中
+
+```java
+@TableField(exist = false)
+private Integer online;
+```
+
+## id自增策略
+
+可以使用`@TableId`注解
+如果想要为所有实体类的id部署id自增策略，需要进行全局配置
+
+```xml
+mybatis-plus:
+  configuration:
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+  global-config:
+    banner: false
+    db-config:
+      id-type: auto
+```
+
+## 多条数据的查询和删除
+
+删除
+
+```java
+void testDelete2(){
+    List<Long> list = new ArrayList<>();
+    list.add(6L);
+    list.add(7L);
+    userDao.deleteBatchIds(list);
+}
+```
+
+查询
+
+```java
+void testQueryMultiple(){
+    List<Long> list = new ArrayList<>();
+    list.add(1L);
+    list.add(2L);
+    list.add(3L);
+    userDao.selectBatchIds(list);
+}
+```
+
+## 逻辑删除
+
+考虑到现实业务中，涉及到很多多表连结;需要做到一个表内某条数据被删除，在另外一个表内仍需要存在的情况，这时候可以在表内添加字段标定该条数据是否被删除
+
+在Mybatis-Plus中, 同样可以使用注解和全局配置来实现
+
+没被删除时默认值是0, 一旦被删除默认值则变为1
+
+```java
+@TableLogic(value = "0", delval = "1")
+```
+
+或者全局配置
+
+标定判断该条数据是否被删除的字段是`deleted`, 没被删除时默认值是0, 一旦被删除默认值则变为1
+
+```xml
+logic-delete-field: deleted
+logic-not-delete-value: 0
+logic-delete-value: 1
+```
+
+## 乐观锁
+
+*TODO*: 乐观锁的学习
+
+首先, 要想使用乐观锁, 需要设置对应的拦截器
+`mybatisPlusInterceptor.addInnerInterceptor(new OptimisticLockerInnerInterceptor());`
+
+需要在要上锁的字段上加上注解`@Version`
+
+要么直接使用`set`方法设置设置字段, 乐观锁会在这个字段上进行累加; 如果不提供version，既无法在原基础上进行累加
+
+```java
+void testOptimisticLocker(){
+    User user = new User();
+    user.setId(3L);
+    user.setName("Jock666");
+  
+    user.setVersion(1);
+    userDao.updateById(user);
+}
+```
+
+还有一种方式:
+
+1. 先通过修改数据的id将当前数据查询出来
+2. 这样user对象里面是有version的
+
+```java
+void testOptimisticLocker2(){
+    User user = userDao.selectById(3L);
+    user.setName("Jock888");
+    userDao.updateById(user);
+}
+```

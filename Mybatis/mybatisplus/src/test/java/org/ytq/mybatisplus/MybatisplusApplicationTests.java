@@ -11,6 +11,7 @@ import org.ytq.dao.UserDao;
 import org.ytq.domain.User;
 import org.ytq.domain.query.UserQuery;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -33,7 +34,16 @@ class MybatisplusApplicationTests {
 	// 删除 id为1665627495222026242的用户
 	@Test
 	void testDelete(){
-		userDao.deleteById(1665627495222026242L);
+		userDao.deleteById(1);
+	}
+
+	// 一次性删除多条符合条件的记录
+	@Test
+	void testDelete2(){
+		List<Long> list = new ArrayList<>();
+		list.add(6L);
+		list.add(7L);
+		userDao.deleteBatchIds(list);
 	}
 
 	// 修改
@@ -139,4 +149,34 @@ class MybatisplusApplicationTests {
 		System.out.println(users);
 	}
 
+	// 多数据查询
+	@Test
+	void testQueryMultiple(){
+		List<Long> list = new ArrayList<>();
+		list.add(1L);
+		list.add(2L);
+		list.add(3L);
+		userDao.selectBatchIds(list);
+	}
+
+	// 乐观锁
+	@Test
+	void testOptimisticLocker(){
+		User user = new User();
+		user.setId(3L);
+		user.setName("Jock666");
+		// 如果不提供version，既无法在原基础上进行累加
+		user.setVersion(1);
+		userDao.updateById(user);
+	}
+
+	@Test
+	void testOptimisticLocker2(){
+		// 1. 先通过修改数据的id将当前数据查询出来
+		User user = userDao.selectById(3L);
+		user.setName("Jock888");
+		// 2. 这样user对象里面是有version的
+
+		userDao.updateById(user);
+	}
 }
