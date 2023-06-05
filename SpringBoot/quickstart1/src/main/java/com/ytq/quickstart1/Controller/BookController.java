@@ -36,7 +36,7 @@ public class BookController {
         System.out.println("-------------------------------------------------");
         System.out.println(environment.getProperty("lesson"));
         System.out.println(environment.getProperty("server.port"));
-         System.out.println(environment.getProperty("enterprise.age"));
+        System.out.println(environment.getProperty("enterprise.age"));
         System.out.println(environment.getProperty("enterprise.subject[1]"));
         System.out.println("-------------------------------------------------");
         System.out.println(enterprise.toString());
