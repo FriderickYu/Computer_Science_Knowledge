@@ -9,8 +9,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.ytq.dao.UserDao;
 import org.ytq.domain.User;
+import org.ytq.domain.query.UserQuery;
 
 import java.util.List;
+import java.util.Map;
 
 @SpringBootTest
 class MybatisplusApplicationTests {
@@ -92,6 +94,45 @@ class MybatisplusApplicationTests {
 		System.out.println(userList);
 	}
 
+	/**
+	 * 条件查询 null
+	 */
+	@Test
+	void testQueryByCondition2(){
+		UserQuery userQuery = new UserQuery();
+		userQuery.setUpper_age(30);
+		userQuery.setAge(10);
+		LambdaQueryWrapper<User> lambdaQueryWrapper = new LambdaQueryWrapper<>();
+		lambdaQueryWrapper.lt(userQuery.getUpper_age() != null, User::getAge, userQuery.getUpper_age());
+		lambdaQueryWrapper.gt(userQuery.getAge() != null, User::getAge, userQuery.getAge());
+		List<User> userList = userDao.selectList(lambdaQueryWrapper);
+		System.out.println(userList);
+	}
+
+	// 条件查询 投影
+	@Test
+	void testQueryByCondition3(){
+//		LambdaQueryWrapper<User> lambdaQueryWrapper = new LambdaQueryWrapper<>();
+//		lambdaQueryWrapper.select(User::getId, User::getName, User::getAge);
+//		List<User> userList = userDao.selectList(lambdaQueryWrapper);
+//		System.out.println(userList);
+		QueryWrapper<User> queryWrapper = new QueryWrapper();
+		queryWrapper.select("count(*) as nums, age");
+		queryWrapper.groupBy("age");
+		List<Map<String, Object>> maps = userDao.selectMaps(queryWrapper);
+		System.out.println(maps);
+
+	}
+
+	// 条件查询 其他
+	// 等同于 select * from user where username="ytq" and password="qty";
+	@Test
+	void testQueryByCondition4(){
+		LambdaQueryWrapper<User> lambdaQueryWrapper = new LambdaQueryWrapper<>();
+		lambdaQueryWrapper.eq(User::getName, "ytq1").eq(User::getPassword, "qty");
+		User loginUser = userDao.selectOne(lambdaQueryWrapper);
+		System.out.println(loginUser);
+	}
 	@Test
 	void testgetAll() {
 		List<User> users = userDao.selectList(null);

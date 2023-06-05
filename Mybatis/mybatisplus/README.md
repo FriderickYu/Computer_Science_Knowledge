@@ -1,8 +1,9 @@
 # MyBatis-Plus笔记摘要
 
+[官方文档参考](https://baomidou.com/)
 
 | 功能       | 自定义接口                             | MyBatisPlus接口                              |
-| ---------- | -------------------------------------- | -------------------------------------------- |
+| ------------ | ---------------------------------------- | ---------------------------------------------- |
 | 新增       | boolean save(T t)                      | int insert(T t)                              |
 | 删除       | boolean delete(int id)                 | int deleteById(Serializable id)              |
 | 修改       | boolean update(T t)                    | int updateById(T t)                          |
@@ -84,9 +85,9 @@ public class User {
 ```
 
 ## 分页功能
+
 分页其实指的就是`select * from user limit 1,2;`
 使用`IPage selectPage(IPage page)`实现
-
 
 ```java
 @Test
@@ -107,6 +108,7 @@ void testGetByPage(){
 ```
 
 单单实现`selectPage`接口没有用，还要进行配置，去拦截分页
+
 ```java
 @Configuration
 public class MpConfig {
@@ -126,6 +128,7 @@ public class MpConfig {
 条件查询需要用到`QueryWrapper`类型的对象，因为像`selectList`这种接口只接收这种类型的参数
 
 第一种，直接使用接口进行条件查询
+
 ```java
 QueryWrapper queryWrapper = new QueryWrapper();
 // 查询18岁以下的人
@@ -135,6 +138,7 @@ System.out.println(userList);
 ```
 
 第二种，使用`lambda`表达式
+
 ```java
 QueryWrapper<User> queryWrapper = new QueryWrapper();
 queryWrapper.lambda().lt(User::getAge, 18);
@@ -147,8 +151,103 @@ System.out.println(userList);
 `LambdaQueryWrapper<User> lambdaQueryWrapper = new LambdaQueryWrapper<>();`
 
 遇到多重条件查询, 可以使用链式法则进行嵌套
+
 ```java
 lambdaQueryWrapper.lt(User::getAge, 25).gt(User::getAge, 10);
 // OR关系,例如小于10岁或者大于30岁
 lambdaQueryWrapper.lt(User::getAge, 10).or().gt(User::getAge, 30);
 ```
+
+### 条件为null
+
+有的时候，如果要对某一个字段的范围进行检索，例如想查询价格在0~100之间的商品，这个的下限是0，怎么进行处理
+
+如果不舍`wrapper.gt`, 只设`wrapper.lt`, 则下限就会是`null`
+
+首先，新设计一个类，并继承原来的`User`类，新类具有字段`upper_age`
+
+```java
+@Data
+public class UserQuery extends User {
+    private Integer upper_age;
+}
+```
+
+使用`getAge`取出来的值，可以直接使用`if`进行判断，如果不为空才继续处理
+
+```java
+if(userQuery.getAge() != null){
+    lambdaQueryWrapper.lt(User::getAge, userQuery.getUpper_age());
+}
+```
+
+其实，`lt`方法中间的参数是提供了逻辑判断的, `public Children lt(boolean condition, R column, Object val)`，所以可以这样
+
+```java
+void testQueryByCondition2(){
+    UserQuery userQuery = new UserQuery();
+    userQuery.setUpper_age(30);
+    userQuery.setAge(10);
+    LambdaQueryWrapper<User> lambdaQueryWrapper = new LambdaQueryWrapper<>();
+    lambdaQueryWrapper.lt(userQuery.getUpper_age() != null, User::getAge, userQuery.getUpper_age());
+    lambdaQueryWrapper.gt(userQuery.getAge() != null, User::getAge, userQuery.getAge());
+    List<User> userList = userDao.selectList(lambdaQueryWrapper);
+    System.out.println(userList);
+}
+```
+
+### 条件查询 投影
+
+如何实现`select id, name, age from user`
+
+使用`select`方法，在lambda表达式中将想要投影的属性列出即可
+
+```java
+lambdaQueryWrapper.select(User::getId, User::getName, User::getAge);
+List<User> userList = userDao.selectList(lambdaQueryWrapper);
+```
+
+还可以实现`count` `groupBy`等方法
+
+```java
+QueryWrapper<User> queryWrapper = new QueryWrapper();
+queryWrapper.select("count(*) as nums, age");
+queryWrapper.groupBy("age");
+List<Map<String, Object>> maps = userDao.selectMaps(queryWrapper);
+```
+
+### 条件查询 其他
+
+#### 相等
+
+`select * from user where username="ytq" and password="qty";`等同于
+
+```java
+LambdaQueryWrapper<User> lambdaQueryWrapper = new LambdaQueryWrapper<>();
+lambdaQueryWrapper.eq(User::getName, "ytq1").eq(User::getPassword, "qty");
+User loginUser = userDao.selectOne(lambdaQueryWrapper);
+System.out.println(loginUser);
+```
+
+由于抽出来的只是一条数据，所以可以使用`selectOne()`方法
+
+#### 范围查询
+
+
+| 方法      | 关系         |
+| ----------- | -------------- |
+| `lt`      | 小于         |
+| `le`      | 小于等于     |
+| `gt`      | 大于         |
+| `ge`      | 大于等于     |
+| `eq`      | 等于         |
+| `between` | 在某个区间内 |
+
+#### 模糊查询
+
+模糊查询最常见的就是`like`, 这里同样也有相同的方法
+* `like`: 匹配%字符%
+* `likeLeft`: 匹配%字符
+* `likeRight`: 匹配字符%
+
+## 
