@@ -9,6 +9,6 @@
 > * [Matplotlib Package Official Document](https://www.matplotlib.org.cn/)
 > * [Seaborn Official Document](https://seaborn.apachecn.org/#/)
 
-<img height="550" src="NumPy/image/copy.jpg" width="500"/>
+
 
 
