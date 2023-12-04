@@ -9,4 +9,4 @@
 ## 笔记目录
 
 
-* [第二讲](./Lecture2/Lecture2.md)
+* [第二讲 - 图像分类](./Lecture2/Lecture2.md)
