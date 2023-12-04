@@ -9,4 +9,5 @@
 ## 笔记目录
 
 
+* [Python基础](./Pre_base/Python_DS.ipynb)
 * [第二讲 - 图像分类](./Lecture2/Lecture2.md)

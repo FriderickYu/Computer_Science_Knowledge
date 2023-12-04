@@ -128,6 +128,14 @@ Ex: 比如`NLP`中, 比较两段文字是否属于一个意思, 就可以分别�
 3. 猫的分数最大
 4. 这个图像里面是猫
 
+这里有一个`bias trick`, 作用如下, 把权重W和偏移量b合二为一
+
+$$f(x, W) = Wx + b => f(x, W) = Wx$$
+
+<img alt="bias trick" height="190" src="../images/Lecture2/bias_trick.png" width="500"/>
+
+因为`W.shape[1]`与`b.shape[0]`是一样的, 所以可以将`W`和`b`合并成一个矩阵, 而`x`再加一个维度(default 1)
+
 <img alt="线性分类器2" height="238" src="../images/Lecture2/linear_classifier2.jpg" width="500"/>
 
 过程解释: 
