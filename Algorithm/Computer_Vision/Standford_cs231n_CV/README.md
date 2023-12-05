@@ -11,3 +11,4 @@
 
 * [Python基础](./Pre_base/Python_DS.ipynb)
 * [第二讲 - 图像分类](./Lecture2/Lecture2.md)
+* [第三讲 - 损失函数与优化](./Lecture3/Lecture3.md)
