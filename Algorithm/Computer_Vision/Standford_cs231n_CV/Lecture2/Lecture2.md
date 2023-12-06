@@ -1,9 +1,11 @@
 # Image Classification
 
 ## 什么叫分类算法
+
 分类任务: 给出一张图片->给出对应的标签
 
 面临的问题:
+
 * 计算机看到的具体来说不是一张图片, 而是一个像素矩阵(比如说800*600*3), *如何把图片和其像素矩阵联系起来是个问题*
 * Viewpoint variation, 移动相机, 图片的角度会有所改变, 矩阵中的像素点会随之改变
 * Illumination
@@ -11,23 +13,27 @@
 * Occlusion, 遮挡
 * etc....
 
-
-
 ## Data-Driven
+
 视觉算法不能像排序算法一样硬编码, 没有一个标准的处理流程, 所以把数据丢给计算机, 让计算机自己去学习是最合适的一种选择
+
 * 寻找图片集
 * 人工分类 -> 数据标注
 * 丢给机器 -> 训练数据集 => 找出合适的`classifier`
 * 用训练好的`classifier`去预测新的图片
 
 ### 最简单的classififer, Nearest Neighbor
+
 `train`: 读取并存储所有`data`和`labels`
+
 ```python
 def train(images, labels):
     # Training
     return model
 ```
+
 `predict`: 拿到新图片后, 观察新图片与哪些图片相似, 然后返回*最相似图片*的标签
+
 ```python
 def predict(model, test_images):
     # Use model to predict labels
@@ -35,6 +41,7 @@ def predict(model, test_images):
 ```
 
 具体的`classifier`代码如下
+
 ```python
 import numpy as np
 
@@ -73,6 +80,7 @@ class NearestNeighbor:
 * 时间复杂度不好, 一般来说训练时间可以比较长, 但预测时间要相对较短, `Nearest Neighbor`算法正好相反
 
 ## 改进, KNN算法
+
 刚才的`Nearest Neighbor`算法, 找的是最近, 即K=1; 如果K>1, 说不定效果会更好(**找最近的K个点**)
 
 ### 如何判定近的这个概念
@@ -88,8 +96,8 @@ class NearestNeighbor:
 Ex: 比如`NLP`中, 比较两段文字是否属于一个意思, 就可以分别算出连两段文字的距离
 
 ### Hyperparameter, 超参数
-超参数: 指那些不能从训练中主动学习, 调整, 修改, 但又确实能够影响实际训练效果的参数, 比如`KNN`算法中的K, 还有距离算法
 
+超参数: 指那些不能从训练中主动学习, 调整, 修改, 但又确实能够影响实际训练效果的参数, 比如`KNN`算法中的K, 还有距离算法
 
 #### 如何选定超参数
 
@@ -100,7 +108,9 @@ Ex: 比如`NLP`中, 比较两段文字是否属于一个意思, 就可以分别�
 3. 分割数据集 -> `train/val/test`, 先在`train`中训练出超参, 然后把找好的超参在`val`数据集中进行验证, 找到最好的一个, 并用在`test`中使用 => **MUCH BETTER!!!**
 
 ### KNN算法的缺点
+
 `KNN`算法不适合在图像问题上使用, 原因在于
+
 1. 训练速度比较快, 但预测速度太慢了,时间复杂度上不符合
 2. 计算矩阵中的像素点间的距离毫无意义'
 3. 维度诅咒
@@ -119,9 +129,13 @@ Ex: 比如`NLP`中, 比较两段文字是否属于一个意思, 就可以分别�
 <img alt="线性分类器1" height="223" src="../images/Lecture2/linear_classifier1.png" width="500"/>
 
 参数说明:
+
 * `x`: 图片的像素矩阵
 * `W`: 权重矩阵
-* `b`: 偏移项, 比如说数据集中猫的图片比狗的要多, 那$$b_猫 > b_狗$$
+* `b`: 偏移项, 比如说数据集中猫的图片比狗的要多, 那
+  $$
+  b_猫 > b_狗
+  $$
 
 1. 图像像素矩阵与权重相结合
 2. 算出分数(1*10矩阵)
@@ -130,7 +144,9 @@ Ex: 比如`NLP`中, 比较两段文字是否属于一个意思, 就可以分别�
 
 这里有一个`bias trick`, 作用如下, 把权重W和偏移量b合二为一
 
-$$f(x, W) = Wx + b => f(x, W) = Wx$$
+$$
+f(x, W) = Wx + b => f(x, W) = Wx
+$$
 
 <img alt="bias trick" height="190" src="../images/Lecture2/bias_trick.png" width="500"/>
 
@@ -138,9 +154,11 @@ $$f(x, W) = Wx + b => f(x, W) = Wx$$
 
 <img alt="线性分类器2" height="238" src="../images/Lecture2/linear_classifier2.jpg" width="500"/>
 
-过程解释: 
+过程解释:
+
 1. 输入的照片是一个简单的2*2矩阵, 转换成4*1的转置矩阵
 2. 权限矩阵, 因为输入的图片shape为4, 图片一共有3类, 所以权限矩阵为3*4
+   1. 权限矩阵的每一行都是一个类别的分类器
 
 ### Linear Classification的问题
 
