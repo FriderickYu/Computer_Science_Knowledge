@@ -187,3 +187,5 @@ while True:
 
 梯度下降利用损失函数对模型参数的梯度, 沿着梯度的反方向不断调整参数, 使得损失函数不断减小, 直到达到`local minimum`; 这是因为梯度的*正方向*是目标函数增长最快的方向, 
 而梯度的*反方向*则是目标函数减小最快的方向. 沿着反方向更新参数就可以逐渐找到`local minimum`
+
+[Numberical gradient vs. Analytical gradient](https://yunist.cn/ML/optimizer/numerical_analytical_gradient/)
