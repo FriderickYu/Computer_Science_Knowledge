@@ -13,6 +13,8 @@
 * [第二讲 - 图像分类](./Lecture2/Lecture2.md)
 * [第三讲 - 损失函数与优化](./Lecture3/Lecture3.md)
 * [第四讲 - 反向传播与神经网络](./Lecture4/Lecture4.md)
+* [第五讲 - 卷积神经网络](./Lecture5/Lecture5.md)
+* [第六讲 - 如何训练一个神经网络之第一部分](./Lecture6/Lecture6.md)
 
 ## 参考资料
 * [如何在jupyter notebook上使用Python本地的虚拟环境](https://cloud.tencent.com/developer/article/1917088)
