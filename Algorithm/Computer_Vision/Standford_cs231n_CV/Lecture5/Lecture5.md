@@ -65,18 +65,23 @@ $Output Size = \frac{7 + 2 - 3}{1} + 1 = 7$
 <img alt="1*1的卷积核" height="230" src="../images/Lecture5/11_convolution_layer.png" width="500"/>
 
 其实$1 \times 1$尺寸的卷积核也是很可以的
+
 * 优点: 可以完全的保障输出卷积层的尺寸, 只降低了`depth`
 * 缺点: 计算量太大
 
 ### 卷积层超参数
+
 1. 卷积核数量: K
 2. 单个卷积核的尺寸: F
 3. 滑动步长: S
 4. zero padding个数: P
 
+$\frac{W - F + 2 \times P}{S} + 1$
+
 ## 池化
 
 当输入的像素矩阵, 经过全连接层和卷积层处理后, 需要进行池化, 池化一般紧跟在卷积层后, 有以下的作用:
+
 1. 减小特征图的尺寸, 以降低后续的计算复杂度
 2. 减少参数数量, 因为池化会down-sampling, 降低模型复杂度, 防止过拟合
 3. 保留关键信息, 使得模型对于平移, 旋转等变换具有一定的不变性
@@ -88,4 +93,3 @@ $Output Size = \frac{7 + 2 - 3}{1} + 1 = 7$
 <img alt="max pooling" height="238" src="../images/Lecture5/max_pooling.png" width="500"/>
 
 最经典的池化就是`max pooling`, 如上图所示, 选定特定的卷积核和步长, 最终划定四个范围, 在每个范围当中挑最大; 在有些情况下, `max pooling`非常的合适, 比如目标识别任务
-

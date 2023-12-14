@@ -15,6 +15,7 @@
 * [第四讲 - 反向传播与神经网络](./Lecture4/Lecture4.md)
 * [第五讲 - 卷积神经网络](./Lecture5/Lecture5.md)
 * [第六讲 - 如何训练一个神经网络之第一部分](./Lecture6/Lecture6.md)
+* [第七讲 - 如何训练一个神经网络之第二部分](./Lecture7/Lecture7.md)
 
 ## 参考资料
 * [如何在jupyter notebook上使用Python本地的虚拟环境](https://cloud.tencent.com/developer/article/1917088)
