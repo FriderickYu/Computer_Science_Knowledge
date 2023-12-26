@@ -87,6 +87,8 @@ class NearestNeighbor:
 
 <img alt="L1和L2" height="227" src="../images/Lecture2/distance_metric.png" width="500"/>
 
+<img alt="L1计算过程" height="237" src="../images/Lecture2/L1_computing.jpg" width="500"/>
+
 如何判断两点是否属于一个`classification`?
 
 最简单的就是使用上面这两种计算距离, 曼哈顿距离和欧几里得距离, 两个计算方式的选定与具体区别要看实际的使用场景;
