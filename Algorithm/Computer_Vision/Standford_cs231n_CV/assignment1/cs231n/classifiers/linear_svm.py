@@ -28,8 +28,12 @@ def svm_loss_naive(W, X, y, reg):
     num_classes = W.shape[1]
     num_train = X.shape[0]
     loss = 0.0
+    # 开始遍历所有训练数据
     for i in range(num_train):
+        # 计算当前样本分数
+        # scores数组(N,C), 行代表N个训练样本, 列代表C个标签
         scores = X[i].dot(W)
+        # y[i]代表第i个样本对应的实际标签,
         correct_class_score = scores[y[i]]
         for j in range(num_classes):
             if j == y[i]:
@@ -37,13 +41,19 @@ def svm_loss_naive(W, X, y, reg):
             margin = scores[j] - correct_class_score + 1  # note delta = 1
             if margin > 0:
                 loss += margin
+                # 公式2
+                dW[:, y[i]] += -X[i, :].T
+                # 公式1
+                dW[:, j] += X[i, :].T
 
     # Right now the loss is a sum over all training examples, but we want it
     # to be an average instead so we divide by num_train.
     loss /= num_train
-
+    dW /= num_train
     # Add regularization to the loss.
+    # L2 Regularization
     loss += reg * np.sum(W * W)
+    dW + reg*W
 
     #############################################################################
     # TODO:                                                                     #
@@ -78,7 +88,20 @@ def svm_loss_vectorized(W, X, y, reg):
     #############################################################################
     # *****START OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
 
-    pass
+    num_classes = W.shape[1]
+    num_train = X.shape[0]
+    scores = X.dot(W)
+    # 利用np.arange(), correct_class_score变成了(num_train, y)的矩阵
+    correct_class_score = scores[np.arange(num_train), y]
+    correct_class_score = np.reshape(correct_class_score,(num_train,-1))
+    margins = scores - correct_class_score + 1
+    margins = np.maximum(0, margins)
+    # 然后这里计算了j=y[i]的情形，所以把他们置为0
+    margins[np.arange(num_train),y] = 0
+    loss += np.sum(margins) / num_train
+    loss += reg * np.sum( W * W)
+
+
 
     # *****END OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
 
@@ -93,7 +116,14 @@ def svm_loss_vectorized(W, X, y, reg):
     #############################################################################
     # *****START OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
 
-    pass
+    margins[margins > 0] = 1
+    # 因为j=y[i]的那一个元素的grad要计算 >0 的那些次数次
+    row_sum = np.sum(margins,axis=1)
+    margins[np.arange(num_train),y] = -row_sum.T
+    # 把公式1和2合到一起计算了
+    dW = np.dot(X.T,margins)
+    dW /= num_train
+    dW += reg * W
 
     # *****END OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
 

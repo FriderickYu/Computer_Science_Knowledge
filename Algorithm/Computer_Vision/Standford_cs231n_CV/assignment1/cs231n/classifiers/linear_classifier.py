@@ -13,14 +13,14 @@ class LinearClassifier(object):
         self.W = None
 
     def train(
-        self,
-        X,
-        y,
-        learning_rate=1e-3,
-        reg=1e-5,
-        num_iters=100,
-        batch_size=200,
-        verbose=False,
+            self,
+            X,
+            y,
+            learning_rate=1e-3,
+            reg=1e-5,
+            num_iters=100,
+            batch_size=200,
+            verbose=False,
     ):
         """
         Train this linear classifier using stochastic gradient descent.
@@ -41,7 +41,7 @@ class LinearClassifier(object):
         """
         num_train, dim = X.shape
         num_classes = (
-            np.max(y) + 1
+                np.max(y) + 1
         )  # assume y takes values 0...K-1 where K is number of classes
         if self.W is None:
             # lazily initialize W
@@ -65,8 +65,9 @@ class LinearClassifier(object):
             # replacement is faster than sampling without replacement.              #
             #########################################################################
             # *****START OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
-
-            pass
+            batch_inx = np.random.choice(num_train, batch_size)
+            X_batch = X[batch_inx, :]
+            y_batch = y[batch_inx]
 
             # *****END OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
 
@@ -81,7 +82,7 @@ class LinearClassifier(object):
             #########################################################################
             # *****START OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
 
-            pass
+            self.W = self.W - learning_rate * grad
 
             # *****END OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
 
@@ -110,8 +111,8 @@ class LinearClassifier(object):
         # Implement this method. Store the predicted labels in y_pred.            #
         ###########################################################################
         # *****START OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
-
-        pass
+        score = X.dot(self.W)
+        y_pred = np.argmax(score, axis=1)
 
         # *****END OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
         return y_pred
