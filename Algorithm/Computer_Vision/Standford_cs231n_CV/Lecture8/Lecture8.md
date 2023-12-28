@@ -10,3 +10,4 @@
 
 1. 访问这个网站 https://pytorch.org/get-started/previous-versions/
 2. 查看cuda版本: `cat /usr/local/cuda/version.txt`
+3.  安装对应版本的pytorch: `pip install --proxy http://10.188.48.164:8365/ -i https://mirror.sjtu.edu.cn/pypi/web/simple/ torch==1.8.1 torchvision==0.9.1 torchaudio==0.8.1`
