@@ -92,9 +92,17 @@ $\begin{array}{ll}\mathrm{L} 2 \text { regularization } & R(W)=\sum_k \sum_l W_{
 
 SVM预测出来的分数并没有赋予实际更多的意义
 
+如果模型能输出10个标签的概率, 对应真实标签的概率输出尽可能接近100%, 而其他标签的概率输出尽可能接近0%, 且所有输出概率之和为1, 那就是最好的
+
+
+
 $\left.\begin{array}{|l|l}\hline P\left(Y=k \mid X=x_i\right)=\frac{e^{s_k}}{\sum_j e^{s_j}} \quad \text { where } \quad s=f\left(x_i ; W\right) \\ L_i=-\log P\left(Y=y_i \mid X=x_i\right)\end{array}\right\} \quad L_i=-\log \left(\frac{e^{s y_i}}{\sum_j e^{s_j}}\right)$
 
 其中$P\left(Y=k \mid X=x_i\right)=\frac{e^{s_k}}{\sum_j e^{s_j}}$的作用是概率分布, 使最终的值位于$[0,1]$之间, 并且总和正好等于1
+
+下面是一个三个标签的分类模型使用的`Softmax`输出层, 经过`Softmax`函数后, 输出三个标签的概率
+
+<img alt="典型的softmax处理" height="356" src="../images/Lecture3/typical_softmax.png" width="500"/>
 
 <img alt="softmax" height="240" src="../images/Lecture3/softmax.jpg" width="500"/>
 

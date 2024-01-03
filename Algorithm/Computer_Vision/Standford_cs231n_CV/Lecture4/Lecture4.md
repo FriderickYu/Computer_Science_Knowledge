@@ -1,4 +1,4 @@
-# Backpropagation nd Neural Networks
+# Backpropagation and Neural Networks
 
 ## What is backpropagation?
 
@@ -46,3 +46,11 @@ Jacobian matrix, 即雅可比矩阵, 是一个矩阵, 矩阵的每一个元素�
 下面是Jacobian matrix的计算示例
 
 <img alt="Jacobian_matrix" height="279" src="../images/Lecture4/Jacobian_matrix.jpg" width="500"/>
+
+## Neural Network
+
+人工神经网络包括多个神经网络层, 如卷积层, 全连接层, `LSTM`等, 每一层又包括很多神经元, 超过三层的*非线性神经网络*都可称之为深度神经网络
+
+神经网络的标准结构中每个神经元由加权和非线性变换构成， 然后将多个神经元分层的摆放并连接成神经网络; 最简单的就是线性回归模型, 输入, 一个加权和神经元, 输出
+
+![](../images/Lecture8/simplest_neuralNetwork.png)
